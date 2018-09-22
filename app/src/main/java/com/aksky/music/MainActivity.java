@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -26,13 +29,23 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    replaceFragment(new HomeFragment());
                    // mTextMessage.setText(R.string.title_home);
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_star:
                    // mTextMessage.setText(R.string.title_dashboard);
+                    replaceFragment(new StarFragment());
+                    return true;
+                case R.id.navigation_dashboard:
+                   // mTextMessage.setText(R.string.title_notifications);
                     return true;
                 case R.id.navigation_notifications:
-                   // mTextMessage.setText(R.string.title_notifications);
+                    // mTextMessage.setText(R.string.title_notifications);
+                    return true;
+
+                case R.id.navigation_person:
+                    // mTextMessage.setText(R.string.title_notifications);
+                    replaceFragment(new PersonFragment());
                     return true;
             }
             return false;
@@ -63,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         //mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        replaceFragment(new HomeFragment());
     }
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.toolbar,menu);
@@ -89,5 +103,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager =getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.right_layout,fragment);
+        //transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
