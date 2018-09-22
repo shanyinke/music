@@ -36,12 +36,11 @@ public class MainActivity extends AppCompatActivity {
                    // mTextMessage.setText(R.string.title_dashboard);
                     replaceFragment(new StarFragment());
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_view_list:
                    // mTextMessage.setText(R.string.title_notifications);
+                    replaceFragment(new ListFragment());
                     return true;
-                case R.id.navigation_notifications:
-                    // mTextMessage.setText(R.string.title_notifications);
-                    return true;
+
 
                 case R.id.navigation_person:
                     // mTextMessage.setText(R.string.title_notifications);

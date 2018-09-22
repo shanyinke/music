@@ -3,6 +3,7 @@
     <string name="title_home">主页</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_view">列表</string>
     <string name="title_person">我的</string>
     <string name="title_star">精选</string>
 
