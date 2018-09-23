@@ -41,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new ListFragment());
                     return true;
 
-
+                case R.id.navigation_exlore:
+                    // mTextMessage.setText(R.string.title_notifications);
+                    replaceFragment(new ExploreFragment());
+                    return true;
                 case R.id.navigation_person:
                     // mTextMessage.setText(R.string.title_notifications);
                     replaceFragment(new PersonFragment());

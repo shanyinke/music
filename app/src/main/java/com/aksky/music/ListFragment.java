@@ -3,6 +3,7 @@ package com.aksky.music;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 
 
 public class ListFragment extends Fragment {
+    private SwipeRefreshLayout swipeRefreshLayout;
     private String[] data={"Apple","Banana","Orange","Watermelon",
             "Pear","Grape","Pineapple","Strawberry","Cherry","Mango",
             "Apple","Banana","Orange","Watermelon",
@@ -29,10 +31,38 @@ public class ListFragment extends Fragment {
 //        listView = (ListView)view.findViewById(R.id.list_view);
 //        List<Map<String, Object>> list=getData();
 //        listView.setAdapter(new ListViewAdapter(getActivity(), list));
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshFruits();
+            }
+        });
         return view;
+    }
+    private void refreshFruits(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(2000);
 
-
-
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                if (getActivity() == null)
+                    return;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // initFruits();
+                        // adapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }).start();
     }
 
 
