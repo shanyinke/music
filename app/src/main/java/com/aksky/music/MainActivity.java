@@ -12,11 +12,21 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -34,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_star:
                    // mTextMessage.setText(R.string.title_dashboard);
+                    sendRequestWithokHttp();
                     replaceFragment(new StarFragment());
                     return true;
                 case R.id.navigation_view_list:
@@ -113,5 +124,39 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.right_layout,fragment);
         //transaction.addToBackStack(null);
         transaction.commit();
+    }
+    private void  sendRequestWithokHttp(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    OkHttpClient client = new OkHttpClient();
+                    Request request= new Request.Builder()
+                            //指定访问的服务器地址
+                            .url("http://www.fanzhou.com/list.php")
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseDada=  response.body().string();
+                    parseJSONwithGSON3(responseDada);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void parseJSONwithGSON3(String jsonData){
+        Gson gson = new Gson();
+        List<ArticleList> appList = gson.fromJson(jsonData,new TypeToken<List<ArticleList>>(){}.getType());
+        for(ArticleList articleList:appList){
+            Log.d("MainActivity","id is "+ articleList.getId());
+            Log.d("MainActivity","name is "+ articleList.getTitle());
+            Log.d("MainActivity","birthday is "+ articleList.getTypeid());
+            Log.d("MainActivity","creditrating is "+articleList.getWriter());
+            Log.d("MainActivity","creditrating is "+articleList.getTitle());
+        }
+
+
+
     }
 }

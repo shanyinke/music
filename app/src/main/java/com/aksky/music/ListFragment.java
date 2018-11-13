@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -28,15 +30,18 @@ public class ListFragment extends Fragment {
             "Pear","Grape","Pineapple","Strawberry","Cherry","Mango",
             "Apple","Banana","Orange","Watermelon",
             "Pear","Grape","Pineapple","Strawberry","Cherry","Mango"};//初始化数组
-
+    private List<String> dataList = new ArrayList<>();
+    private ArrayAdapter<String> adapter;
+    ListView listView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_list, container, false);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                getActivity(),android.R.layout.simple_list_item_1,data); //定义适配器
-        ListView listView=(ListView) view.findViewById(R.id.list_view);
+       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(    getActivity(),android.R.layout.simple_list_item_1,dataList); //定义适配器
+        adapter =  new ArrayAdapter<>( getActivity(),android.R.layout.simple_list_item_1,dataList);
+        
+        listView=(ListView) view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
        // View view= inflater.inflate(R.layout.home_fragment , container, false);
 //        listView = (ListView)view.findViewById(R.id.list_view);
@@ -78,12 +83,15 @@ public class ListFragment extends Fragment {
         Gson gson = new Gson();
         List<ArticleList> appList = gson.fromJson(jsonData,new TypeToken<List<ArticleList>>(){}.getType());
         for(ArticleList articleList:appList){
-            Log.d("MainActivity","id is "+ articleList.getId());
-            Log.d("MainActivity","name is "+ articleList.getTitle());
-            Log.d("MainActivity","birthday is "+ articleList.getTypeid());
-            Log.d("MainActivity","creditrating is "+articleList.getWriter());
-            Log.d("MainActivity","creditrating is "+articleList.getTitle());
+            Log.d("Fragment","id is "+ articleList.getId());
+            Log.d("Fragment","name is "+ articleList.getTitle());
+            Log.d("Fragment","birthday is "+ articleList.getTypeid());
+            Log.d("Fragment","creditrating is "+articleList.getWriter());
+            Log.d("Fragment","creditrating is "+articleList.getTitle());
+            dataList.add(articleList.getTitle());
         }
+        adapter.notifyDataSetChanged();
+        listView.setSelection(0);
         swipeRefreshLayout.setRefreshing(false);
 
 
