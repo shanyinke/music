@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_star:
                    // mTextMessage.setText(R.string.title_dashboard);
-                    sendRequestWithokHttp();
+
                     replaceFragment(new StarFragment());
                     return true;
                 case R.id.navigation_view_list:
@@ -125,38 +125,5 @@ public class MainActivity extends AppCompatActivity {
         //transaction.addToBackStack(null);
         transaction.commit();
     }
-    private void  sendRequestWithokHttp(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    OkHttpClient client = new OkHttpClient();
-                    Request request= new Request.Builder()
-                            //指定访问的服务器地址
-                            .url("http://www.fanzhou.com/list.php")
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    String responseDada=  response.body().string();
-                    parseJSONwithGSON3(responseDada);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
 
-    private void parseJSONwithGSON3(String jsonData){
-        Gson gson = new Gson();
-        List<ArticleList> appList = gson.fromJson(jsonData,new TypeToken<List<ArticleList>>(){}.getType());
-        for(ArticleList articleList:appList){
-            Log.d("MainActivity","id is "+ articleList.getId());
-            Log.d("MainActivity","name is "+ articleList.getTitle());
-            Log.d("MainActivity","birthday is "+ articleList.getTypeid());
-            Log.d("MainActivity","creditrating is "+articleList.getWriter());
-            Log.d("MainActivity","creditrating is "+articleList.getTitle());
-        }
-
-
-
-    }
 }

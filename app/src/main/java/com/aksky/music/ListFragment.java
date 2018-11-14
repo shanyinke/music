@@ -8,15 +8,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,10 +42,19 @@ public class ListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_list, container, false);
        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(    getActivity(),android.R.layout.simple_list_item_1,dataList); //定义适配器
+        initArticle();
         adapter =  new ArrayAdapter<>( getActivity(),android.R.layout.simple_list_item_1,dataList);
         
         listView=(ListView) view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //ArticleList articlelist = articlelist.get(position);
+                Toast.makeText(getContext(), dataList.get(position),Toast.LENGTH_SHORT).show();
+            }
+        });
        // View view= inflater.inflate(R.layout.home_fragment , container, false);
 //        listView = (ListView)view.findViewById(R.id.list_view);
 //        List<Map<String, Object>> list=getData();
@@ -52,14 +64,23 @@ public class ListFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshFruits();
-
+                refreshArticle();
+                //sendRequestWithokHttp();
             }
         });
         return view;
     }
 
-    private void  sendRequestWithokHttp(){
+//    private void initFruits(){
+//        fruitList.clear();
+//        for(int i=0;i<50;i++){
+//            Random random= new Random();
+//            int index = random.nextInt(fruits.length);
+//            fruitList.add(fruits[index]);
+//        }
+//    }
+
+    private void  initArticle(){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -82,23 +103,22 @@ public class ListFragment extends Fragment {
     private void parseJSONwithGSON3(String jsonData){
         Gson gson = new Gson();
         List<ArticleList> appList = gson.fromJson(jsonData,new TypeToken<List<ArticleList>>(){}.getType());
+        dataList.clear();
         for(ArticleList articleList:appList){
             Log.d("Fragment","id is "+ articleList.getId());
-            Log.d("Fragment","name is "+ articleList.getTitle());
-            Log.d("Fragment","birthday is "+ articleList.getTypeid());
-            Log.d("Fragment","creditrating is "+articleList.getWriter());
-            Log.d("Fragment","creditrating is "+articleList.getTitle());
+            Log.d("Fragment","TITLE is "+ articleList.getTitle());
+            Log.d("Fragment","TYPEID is "+ articleList.getTypeid());
+            Log.d("Fragment","Writer is "+articleList.getWriter());
+            Log.d("Fragment","source is "+articleList.getSource());
             dataList.add(articleList.getTitle());
         }
-        adapter.notifyDataSetChanged();
-        listView.setSelection(0);
-        swipeRefreshLayout.setRefreshing(false);
+
 
 
     }
 
 
-    private void refreshFruits(){
+    private void refreshArticle(){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -113,10 +133,9 @@ public class ListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // initFruits();
-                        // adapter.notifyDataSetChanged();
-                        sendRequestWithokHttp();
-                        swipeRefreshLayout.setRefreshing(false);
+                                       initArticle();
+                        adapter.notifyDataSetChanged();
+                       swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }

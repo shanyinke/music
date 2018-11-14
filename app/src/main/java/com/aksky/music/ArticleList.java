@@ -5,6 +5,7 @@ public class ArticleList {
     private String typeid;
     private String title;
     public String writer;
+    private String source;
     public void setId(String id){
         this.id =id;
     }
@@ -15,6 +16,7 @@ public class ArticleList {
         this.title =title;
     }
     public void setWriter(String creditrating){this.writer=writer;}
+    public void setSource(String source){this.source=source;}
     public String getId(){
         return  id;
     }
@@ -26,5 +28,6 @@ public class ArticleList {
         return title;
    }
    public String getWriter(){return writer;}
+    public String getSource(){return source;}
 
 }
