@@ -71,6 +71,12 @@ public class ListFragment extends Fragment {
         return view;
     }
 
+  @Override
+  public void onActivityCreated(Bundle savedInstanceStase){
+        super.onActivityCreated(savedInstanceStase);
+      refreshArticle();
+  }
+
 //    private void initFruits(){
 //        fruitList.clear();
 //        for(int i=0;i<50;i++){
